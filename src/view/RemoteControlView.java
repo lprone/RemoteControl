@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 
 public class RemoteControlView extends JFrame {
     public RemoteControlView(LocalData localData) {
@@ -13,6 +14,7 @@ public class RemoteControlView extends JFrame {
         setTitle("Remote Control");
         setSize(300, 200);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("remote-control.png")));
 
         JLabel runningLabel = new JLabel("Server running", SwingConstants.CENTER);
         JLabel ipLabel = new JLabel("IP Address:- " + localData.getIp(), SwingConstants.CENTER);
