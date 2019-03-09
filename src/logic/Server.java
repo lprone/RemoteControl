@@ -23,6 +23,12 @@ public class Server {
 
     static class Root implements HttpHandler {
 
+        private String HOME;
+
+        public Root() {
+            this.HOME = Pages.getHome();
+        }
+
         @Override
         public void handle(HttpExchange httpExchange) throws IOException {
 
@@ -44,9 +50,9 @@ public class Server {
                     }
                     break;
             }
-            httpExchange.sendResponseHeaders(200, Pages.HOME.length());
+            httpExchange.sendResponseHeaders(200, HOME.length());
             OutputStream os = httpExchange.getResponseBody();
-            os.write(Pages.HOME.getBytes());
+            os.write(HOME.getBytes());
             os.close();
         }
 

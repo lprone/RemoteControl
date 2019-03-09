@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <style>
+         .button {
+           background-color: #4CAF50; /* Green */
+           border: none;
+           color: white;
+           padding: 200px;
+           text-align: center;
+           text-decoration: none;
+           display: inline-block;
+           font-size: 36px;
+           margin: 4px 2px;
+           cursor: pointer;
+         }
+         
+         .buttonRounded {border-radius: 12px;}
+      </style>
+   </head>
+   <body>
+      <script>
+         function goBack() {
+         var xhttp = new XMLHttpRequest();
+         xhttp.open("GET", "back", true);
+         xhttp.send();
+         }
+         function goNext() {
+         var xhttp = new XMLHttpRequest();
+         xhttp.open("GET", "next", true);
+         xhttp.send();
+         }
+      </script>
+	  <center>
+         <button class="button buttonRounded" type="button" onclick="goBack()">Back</button>
+         <button class="button buttonRounded" type="button" onclick="goNext()">Next</button>
+	  </center>
+   </body>
+</html>
