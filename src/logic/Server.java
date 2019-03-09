@@ -4,7 +4,8 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
-import java.awt.*;
+import java.awt.AWTException;
+import java.awt.Robot;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
@@ -16,17 +17,17 @@ public class Server {
 
     public Server(int port) throws IOException {
         HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
-        server.createContext("/", new Root());
+        server.createContext("/", new Home());
         server.setExecutor(null);
         server.start();
     }
 
-    static class Root implements HttpHandler {
+    static class Home implements HttpHandler {
 
         private String HOME;
 
-        public Root() {
-            this.HOME = Pages.getHome();
+        public Home() throws IOException {
+            this.HOME = Page.getHome();
         }
 
         @Override
