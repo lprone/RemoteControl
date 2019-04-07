@@ -1,47 +1,48 @@
 package controller;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import logic.LocalData;
 import logic.Server;
 import view.RemoteControlView;
 
-import java.io.BufferedReader;
+import javax.swing.JOptionPane;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.URL;
-import java.net.URLConnection;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 
 public class RemoteControlController {
+    private static final String QR_IMAGE_NAME = "URL_QR.png";
+
     public static void startRemoteControl() {
         final int PORT = 9999;
         try {
             LocalData localData = new LocalData(PORT);
             registerRemoteControl(localData);
             new Server(PORT);
-            new RemoteControlView(localData);
+            new RemoteControlView(localData, QR_IMAGE_NAME);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private static void registerRemoteControl(LocalData localData) {
-        String urlS = "http://lprone.com.ar/remoteControl/api.php";
-        String paramStr = "url=<url>";
-
         final String paramValue = "http://" + localData.getIp() + ":" + localData.getPort();
-
-        String data = paramStr.replaceAll("<url>", paramValue);
         try {
-            URL url = new URL(urlS);
-            URLConnection conn = url.openConnection();
-            conn.setDoOutput(true);
-            OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
-            writer.write(data);
-            writer.flush();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            writer.close();
-            reader.close();
-        } catch (Exception ignored) {
+            generateQRCodeImage(paramValue, 350, 350, QR_IMAGE_NAME);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "error al generar QR");
         }
+    }
+
+    private static void generateQRCodeImage(String text, int width, int height, String filePath) throws WriterException, IOException {
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, width, height);
+        Path path = FileSystems.getDefault().getPath(filePath);
+        MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
     }
 }
